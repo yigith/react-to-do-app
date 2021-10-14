@@ -1,4 +1,5 @@
 import './App.css';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 import React, { Component } from 'react';
 
 export class App extends Component {
@@ -24,15 +25,23 @@ export class App extends Component {
           {this.state.tasks
             .sort((a,b) => a.isDone == b.isDone ? a.task.localeCompare(b.task) : a.isDone - b.isDone)
             .map((value, index) =>
-            <li key={index} className={value.isDone ? "done": "undone"}>
+            <li key={index} className={"task-list-item " + (value.isDone ? 'done': 'undone')}>
               <input type="checkbox" checked={value.isDone}
                 onChange={(e) => this.updateTodoStatus(e, index)} />
               <span>{value.task}</span>
+              <a href="#" className="btn-delete-task" onClick={(e) => this.handleDelete(e, index)}><i className="fas fa-times"></i></a>
             </li>
           )}
         </ul>
       </div>
     );
+  }
+
+  handleDelete(e, index) {
+    e.preventDefault();
+    const tasks = [...this.state.tasks];
+    tasks.splice(index, 1);
+    this.setState({ tasks: tasks });
   }
 
   handleSubmit(e) {
